@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+    
+        .bg {
+            background-image: url("img/background_empty.jpg");
+            height: 100%; 
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .transparent_box {
+            position: absolute;
+            top: 10%; 
+            width: 100%; 
+            height: 100%; 
+        }
+
+    </style>
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+</head>
+
+<body>
+
+
+    <script src="https://www.gstatic.com/firebasejs/5.5.8/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+        apiKey: "AIzaSyC1UWFGrbfYkJiwHM4S8AD_T5k53t_3rys",
+        authDomain: "mypath-65fc6.firebaseapp.com",
+        databaseURL: "https://mypath-65fc6.firebaseio.com",
+        projectId: "mypath-65fc6",
+        storageBucket: "mypath-65fc6.appspot.com",
+        messagingSenderId: "855599307120"
+        };
+        firebase.initializeApp(config);
+    </script>
+
+    <script type="text/javascript" src="js/index.js"></script>
+    <!-- <div class="app">
+        <h1>MyPath</h1>
+        <div id="deviceready" class="blink">
+            <p class="event listening">Connecting to Device</p>
+            <p class="event received">Device is Ready</p>
+        </div>
+    </div> -->
+    <div id="map"></div>
+    <div id="divTitle"></div>
+    <div id="divIndex"></div>
+    <textarea id="myText" style="width: 90%; height: 50px; margin: 10px 0px 10px 5%" rows="10" cols="80"></textarea>
+    <table style="width:100%">
+        <tr>
+            <td><button type="button" class="myiconbutton" onclick="map_add_clicked()"><img src="img/ic_add.png" /></button></td>
+            <td><button type="button" class="myiconbutton" onclick="map_delete_clicked()"><img src="img/ic_delete.png" /></button></td>
+            <td><button type="button" class="myiconbutton" onclick="map_left_clicked()"><img src="img/ic_left.png" /></button></td>
+            <td><button type="button" class="myiconbutton" onclick="map_right_clicked()"><img src="img/ic_right.png" /></button></td>
+        </tr>
+    </table> 
+
+    <script type="text/javascript">
+        app.initialize();
+    </script>
+
+
+    <script>
+        // παίρνουμε τον τίτλο μέσω της public μεταβλητής 
+        var title = localStorage.getItem("title");
+
+        // δημιουργούμε object τύπου h1
+        var h = document.createElement("H1");
+        var t = document.createTextNode(title);
+        h.appendChild(t);  
+
+        // το προσθέτουμε στο σημείο divTitle
+        document.getElementById("divTitle").appendChild(h);
+
+        // δημιουργούμε object τύπου h2
+        var h2 = document.createElement("H2");
+        h2.setAttribute("id", "H2");
+        var t2 = document.createTextNode("#1");
+        h2.appendChild(t2);  
+
+        // το προσθέτουμε στο σημείο divIndex
+        document.getElementById("divIndex").appendChild(h2);
+
+    </script>
+
+    <script>
+        // Initialize and add the map
+        function initMap() {
+
+            // αυτός είναι ο index της τρέχουσας εγγραφής
+            var index = 1;
+            localStorage.setItem("index", index);
+            document.getElementById("H2").innerHTML = "#"+index;
+
+            // ως default τιμές για τον χάρτη
+            var latitude = 39.133098;
+            var longitude = 21.818007;
+            var zoom = 4;
+
+            // παίρνουμε το key μέσω της public μεταβλητής 
+            var key = localStorage.getItem("master_key");
+
+            // παίρνουμε από την βάση όλες τις εγγραφές με inputter τον user μας
+            var ref = firebase.database().ref("detail");
+
+            ref.orderByChild("master_key").equalTo(key).on("child_added", function(snapshot) {
+
+                //για κάθε DataSnapshot ελέγχει τα κριτήρια
+                if(snapshot.child("seq_num").val() == index) {
+
+                    // δίνουμε τιμές στις μεταβλητές μας
+                    document.getElementById("myText").value = snapshot.child("body").val();
+                    latitude = snapshot.child("latitude").val();
+                    longitude = snapshot.child("longitude").val();
+                    zoom = snapshot.child("zoom").val();
+
+                }
+
+            });
+            // var greece = {lat: 39.133098, lng: 21.818007};
+            var location = {lat: latitude, lng: longitude};
+            map = new google.maps.Map(document.getElementById('map'), {zoom: zoom, center: location});
+            marker = new google.maps.Marker({position: location, map: map});
+
+            // get current location variables
+            localStorage.setItem("latitude", map.getCenter().lat());
+            localStorage.setItem("longitude", map.getCenter().lng());
+            localStorage.setItem("zoom", map.getZoom());
+
+            map.addListener('center_changed', function() {
+                // 3 seconds after the center of the map has changed
+                window.setTimeout(function() {
+                    localStorage.setItem("latitude", map.getCenter().lat());
+                    localStorage.setItem("longitude", map.getCenter().lng());
+                    localStorage.setItem("zoom", map.getZoom());
+                    //map.panTo(marker.getPosition());
+                }, 3000);
+            });
+
+            // marker.addListener('click', function() {
+            //     map.setZoom(8);
+            //     map.setCenter(marker.getPosition());
+            // });
+
+
+        }
+    </script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAfjmT9YsSH5tFdu7GIW36fWLAj67qkhCc&callback=initMap">
+    </script>
+
+
+</body>
+
+</html>

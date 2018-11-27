@@ -1,6 +1,53 @@
 <!DOCTYPE html>
 <html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+
+        .bg {
+            background-image: url("img/background.jpg");
+            height: 100%; 
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .transparent_box {
+            position: absolute;
+            top: 70%; 
+            width: 100%; 
+            height: 30%; 
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+</head>
+
 <body>
-Test page
+
+    <script type="text/javascript" src="js/index.js"></script>
+    <!-- <div class="app">
+        <h1>MyPath</h1>
+        <div id="deviceready" class="blink">
+            <p class="event listening">Connecting to Device</p>
+            <p class="event received">Device is Ready</p>
+        </div>
+    </div> -->
+    <div class="bg">
+        <div class="transparent_box">
+            <button type="button" class="mybutton" onclick="index_guest_clicked()">Guest</button> 
+            <button type="button" class="mybutton" onclick="index_login_clicked()">Login</button> 
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        app.initialize();
+    </script>
+
 </body>
+
 </html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+    
+        .bg {
+            background-image: url("img/background_empty.jpg");
+            height: 100%; 
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .transparent_box {
+            position: absolute;
+            top: 30%; 
+            width: 100%; 
+            height: 70%; 
+            background-color: white;
+            opacity: 0.8;
+        }
+
+        input[type=text] {
+            width: 100%;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 25px;
+            font-size: 16px;
+            background-color: white;
+            background-image: url('img/ic_user.png');
+            background-position: 10px 0px; 
+            background-repeat: no-repeat;
+            padding: 12px 20px 12px 60px;
+        }
+
+        input[type=password] {
+            width: 100%;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 25px;
+            font-size: 16px;
+            background-color: white;
+            background-image: url('img/ic_password.png');
+            background-position: 10px 0px; 
+            background-repeat: no-repeat;
+            padding: 12px 20px 12px 60px;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+</head>
+<body>
+    <script src="https://www.gstatic.com/firebasejs/5.5.8/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyC1UWFGrbfYkJiwHM4S8AD_T5k53t_3rys",
+            authDomain: "mypath-65fc6.firebaseapp.com",
+            databaseURL: "https://mypath-65fc6.firebaseio.com",
+            projectId: "mypath-65fc6",
+            storageBucket: "mypath-65fc6.appspot.com",
+            messagingSenderId: "855599307120"
+        };
+        firebase.initializeApp(config);
+    </script>
+    
+    <script type="text/javascript" src="js/index.js"></script>
+    <div class="bg">
+        <div class="transparent_box">
+            <h3>Login</h3>
+            <p>Give your email and password:</p>
+            <input type="text" id="email" placeholder="Email">
+            <p></p>
+            <input type="password" id="password" placeholder="Password">
+            <p></p>
+            <button type="button" class="mybutton" onclick="login_login_clicked()">LOGIN</button> 
+            <button type="button" class="mybutton" onclick="login_back_clicked()">BACK</button> 
+        </div>
+    </div>
+   
+</body>
+
+</html>

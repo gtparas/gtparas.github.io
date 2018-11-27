@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+
+        .bg {
+            background-image: url("img/background_empty.jpg");
+            height: 100%; 
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .transparent_box {
+            position: absolute;
+            top: 10%; 
+            width: 100%; 
+            height: 90%; 
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+</head>
+<body>
+    <script src="https://www.gstatic.com/firebasejs/5.5.8/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyC1UWFGrbfYkJiwHM4S8AD_T5k53t_3rys",
+            authDomain: "mypath-65fc6.firebaseapp.com",
+            databaseURL: "https://mypath-65fc6.firebaseio.com",
+            projectId: "mypath-65fc6",
+            storageBucket: "mypath-65fc6.appspot.com",
+            messagingSenderId: "855599307120"
+        };
+        firebase.initializeApp(config);
+    </script>
+
+    <script type="text/javascript" src="js/index.js"></script>
+    <div class="bg">
+        <div class="transparent_box">
+            <div data-role="content" id="divContent" class="divContent">   
+                <p id="content"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // παίρνουμε τον χρήστη μέσω της public μεταβλητής user
+        var user = localStorage.getItem("user");
+
+        // παίρνουμε από την βάση όλες τις εγγραφές με inputter τον user μας
+        var ref = firebase.database().ref("master");
+        ref.orderByChild("inputter").equalTo(user).on("child_added", function(snapshot) {
+
+            // δημιουργούμε ένα κουμπί για κάθε εγγραφή
+            var btn = document.createElement("input");
+            btn.setAttribute("type", "button");
+            btn.setAttribute("class", "mylistbutton");
+            btn.setAttribute("value", snapshot.child("title").val() + " (" + snapshot.child("date").val()+")");
+
+            // βάζουμε listener για το click στο κάθε κουμπί
+            btn.setAttribute("onclick", "list_button_clicked('"+snapshot.key+"','"+snapshot.child("title").val()+"');");
+
+            // προσθέτουμε το κουμπί στο div divContent
+            document.getElementById("divContent").appendChild(btn);
+        });
+    </script>
+    
+</body>
+
+</html>
